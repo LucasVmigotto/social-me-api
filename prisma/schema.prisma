@@ -20,10 +20,13 @@ enum RatingType {
 model User {
   id              Int               @id @default(autoincrement())
   email           String            @unique
-  name            String?
+  password        String
+  name            String
+  activeAccount   Boolean           @default(false)
   posts           Post[]
-  commentaries    Commentaries[]
+  commentaries    Commentary[]
   ratings         UserPostRating[]
+  tokens          SingleUseToken[]
   profile         Profile?
 }
 
@@ -43,7 +46,7 @@ model Post {
   author          User              @relation(fields: [authorId], references: [id])
   views           Int
   history         PostAudit[]
-  commentaries    Commentaries[]
+  commentaries    Commentary[]
   ratings         UserPostRating[]
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
@@ -60,7 +63,7 @@ model PostAudit {
   createdAt       DateTime          @updatedAt
 }
 
-model Commentaries {
+model Commentary {
   id              Int               @id @default(autoincrement())
   content         String
   postId          Int
@@ -78,4 +81,11 @@ model UserPostRating {
   user            User              @relation(fields: [userId], references: [id])
   ratedAt         DateTime          @default(now())
   @@id([postId, userId])
+}
+
+model SingleUseToken {
+  id              Int               @id @default(autoincrement())
+  userId          Int
+  user            User              @relation(fields: [userId], references: [id])
+  token           String            @unique
 }
