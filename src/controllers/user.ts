@@ -3,7 +3,7 @@ import { sign } from 'jsonwebtoken'
 import Request from '../types/request'
 import config from '../config'
 import newAccountTemplate from '../templates/newAccount.template'
-import accountActivatedTemplateCopy from '../templates/accountActivated.template copy'
+import accountActivatedTemplateCopy from '../templates/accountActivated.template'
 import {
   cipherPassword,
   emailAddress,
