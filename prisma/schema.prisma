@@ -34,7 +34,7 @@ model Profile {
   id              Int               @id @default(autoincrement())
   bio             String?
   userId          Int               @unique
-  user            User              @relation(fields: [userId], references: [id])
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Post {
@@ -43,7 +43,7 @@ model Post {
   content         String?
   published       Boolean           @default(false)
   authorId        Int
-  author          User              @relation(fields: [authorId], references: [id])
+  author          User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
   views           Int
   history         PostAudit[]
   commentaries    Commentary[]
@@ -59,7 +59,7 @@ model PostAudit {
   oldContent      String?
   newContent      String?
   postId          Int
-  post            Post              @relation(fields: [postId], references: [id])
+  post            Post              @relation(fields: [postId], references: [id], onDelete: Cascade)
   createdAt       DateTime          @updatedAt
 }
 
@@ -67,18 +67,18 @@ model Commentary {
   id              Int               @id @default(autoincrement())
   content         String
   postId          Int
-  post            Post              @relation(fields: [postId], references: [id])
+  post            Post              @relation(fields: [postId], references: [id], onDelete: Cascade)
   authorId        Int
-  author          User              @relation(fields: [authorId], references: [id])
+  author          User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
   deletedBy       DeletedByType?
 }
 
 model UserPostRating {
   ratingType      RatingType
   postId          Int
-  post            Post              @relation(fields: [postId], references: [id])
+  post            Post              @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId          Int
-  user            User              @relation(fields: [userId], references: [id])
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   ratedAt         DateTime          @default(now())
   @@id([postId, userId])
 }
@@ -86,6 +86,6 @@ model UserPostRating {
 model SingleUseToken {
   id              Int               @id @default(autoincrement())
   userId          Int
-  user            User              @relation(fields: [userId], references: [id])
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   token           String            @unique
 }
