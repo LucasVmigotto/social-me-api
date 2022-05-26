@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DeletedByType {
+  COMMENT_CREATOR
+  POST_OWNER
+}
+
+enum RatingType {
+  LIKE
+  DISLIKE
+}
+
+model User {
+  id              Int               @id @default(autoincrement())
+  email           String            @unique
+  name            String?
+  posts           Post[]
+  commentaries    Commentaries[]
+  ratings         UserPostRating[]
+  profile         Profile?
+}
+
+model Profile {
+  id              Int               @id @default(autoincrement())
+  bio             String?
+  userId          Int               @unique
+  user            User              @relation(fields: [userId], references: [id])
+}
+
+model Post {
+  id              Int               @id @default(autoincrement())
+  title           String            @db.VarChar(255)
+  content         String?
+  published       Boolean           @default(false)
+  authorId        Int
+  author          User              @relation(fields: [authorId], references: [id])
+  views           Int
+  history         PostAudit[]
+  commentaries    Commentaries[]
+  ratings         UserPostRating[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model PostAudit {
+  id              Int               @id @default(autoincrement())
+  oldTitle        String            @db.VarChar(255)
+  newTitle        String            @db.VarChar(255)
+  oldContent      String?
+  newContent      String?
+  postId          Int
+  post            Post              @relation(fields: [postId], references: [id])
+  createdAt       DateTime          @updatedAt
+}
+
+model Commentaries {
+  id              Int               @id @default(autoincrement())
+  content         String
+  postId          Int
+  post            Post              @relation(fields: [postId], references: [id])
+  authorId        Int
+  author          User              @relation(fields: [authorId], references: [id])
+  deletedBy       DeletedByType?
+}
+
+model UserPostRating {
+  ratingType      RatingType
+  postId          Int
+  post            Post              @relation(fields: [postId], references: [id])
+  userId          Int
+  user            User              @relation(fields: [userId], references: [id])
+  ratedAt         DateTime          @default(now())
+  @@id([postId, userId])
+}
