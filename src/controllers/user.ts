@@ -7,7 +7,7 @@ import accountActivatedTemplateCopy from '../templates/accountActivated.template
 import {
   cipherPassword,
   emailAddress,
-  verifyJWTSignature
+  verifyJWT
 } from '../utils'
 
 export default class User {
@@ -60,7 +60,15 @@ export default class User {
           .status(409)
           .send({ error: 'Token not submitted' })
       }
-      const payload: any = await verifyJWTSignature(query.token as string)
+      const payload: any = await verifyJWT(query.token as string)
+      const tokenExists = await prisma.singleUseToken.findUnique({
+        where: { token: query.token as string }
+      })
+      if (!tokenExists) {
+        return response
+          .status(401)
+          .send({ error: 'Token is no more valid' })
+      }
       const updated = await prisma.user.update({
         data: { activeAccount: true },
         where: { id: payload.id }

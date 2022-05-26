@@ -13,7 +13,7 @@ export const cipherPassword = (password: string) => {
   return cipher.update(password, 'utf8', 'hex') + cipher.final('hex')
 }
 
-export const verifyJWTSignature = (token: string, secret = config.JWT_SECRET) =>
+export const verifyJWT = (token: string, secret = config.JWT_SECRET) =>
   new Promise((resolve, reject) => {
     verify(token, secret, (err, tokenPayload) => {
       if (err) {
