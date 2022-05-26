@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "ad277465-7b79-4c72-87d3-bef212fb3f3f",
+		"name": "Social Me",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3798556"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "/users/active-account",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\": {\n        \"name\": \"John Doe\",\n        \"email\": \"john.doe@mail.com\",\n        \"password\": \"pswd123\"\n    },\n    \"profile\": {\n        \"bio\": null\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/auth/active-account?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjUzNTk4Nzc5LCJleHAiOjE2NTM2MDU5Nzl9.7XvJ24QeXCEGBlehaezap-qWAfkLwQgK4KjlI4aCvJU",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"auth",
+								"active-account"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjUzNTk4Nzc5LCJleHAiOjE2NTM2MDU5Nzl9.7XvJ24QeXCEGBlehaezap-qWAfkLwQgK4KjlI4aCvJU"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "/users/create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\": {\n        \"name\": \"John Doe\",\n        \"email\": \"john.doe@mail.com\",\n        \"password\": \"pswd123\"\n    },\n    \"profile\": {\n        \"bio\": null\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/create",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"users",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_HTTP",
+			"value": "http",
+			"type": "string"
+		},
+		{
+			"key": "API_HOST",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"key": "API_PORT",
+			"value": "3000",
+			"type": "string"
+		},
+		{
+			"key": "API_TOKEN",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
