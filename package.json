@@ -12,6 +12,8 @@
     "private": false,
     "scripts": {
         "start:dev": "ts-node-dev -r dotenv/config --transpile-only --no-notify --exit-child src/index.ts",
+        "prisma:migrate:make": "prisma migrate dev --name",
+        "prisma:studio": "prisma studio --port $API_PORT",
         "lint": "ts-standard"
     },
     "devDependencies": {
