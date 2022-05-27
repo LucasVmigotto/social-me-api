@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { Response } from 'express'
 import { sign } from 'jsonwebtoken'
 import Request from '../interfaces/request'
@@ -342,8 +343,6 @@ export default class User {
           .status(409)
           .send({ error: 'Invalid state submitted' })
       }
-      console.log('userId', userId)
-      console.log('params.userId', params.userId)
       if (userId === parseInt(params.userId)) {
         return response
           .status(409)
@@ -361,6 +360,36 @@ export default class User {
     } catch (err) {
       console.error(err)
       logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async remove ({ userId, params, prisma, logger }: Request, response: Response) {
+    try {
+      if (userId === parseInt(params.userId)) {
+        return response
+          .status(409)
+          .send({ error: 'You can not delete your account' })
+      }
+      await prisma.user.delete({
+        where: { id: parseInt(params.userId) }
+      })
+      return response
+        .status(200)
+        .send({
+          message: `User account successfully deleted`
+        })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          return response
+            .status(409)
+            .send({ error: 'User not found' })
+        }
+      }
       return response
         .status(500)
         .send({ error: 'An internal server occurred' })

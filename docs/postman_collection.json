@@ -457,6 +457,45 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "/users/<userId>",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/<userId>",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"users",
+								"<userId>"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
