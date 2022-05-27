@@ -6,5 +6,6 @@ import { PrismaClient } from '@prisma/client'
 export default interface Request extends RequestExpress {
   logger: Logger,
   mailer: Transporter,
-  prisma: PrismaClient
+  prisma: PrismaClient,
+  userId?: number
 }
