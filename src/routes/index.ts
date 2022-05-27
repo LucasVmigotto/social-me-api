@@ -13,9 +13,14 @@ export default (app: any) => {
   app.post('/auth/login', User.login)
 
   // Users
-  app.post('/users/create', User.create)
-  app.get('/users/me', authMiddleware, User.whoami)
-  app.get('/users/list', authMiddleware, adminOnly, User.list)
+  app.post('/users', User.create)
+  app.get('/users/whoami', authMiddleware, User.whoami)
+  app.get('/users', authMiddleware, adminOnly, User.list)
+  app.get('/users/:userId', authMiddleware, User.getUser)
+  app.put('/users/:userId', authMiddleware, User.update)
+  app.put('/users/profile/:userId', authMiddleware, User.updateProfile)
+  app.patch('/users/account-state/:state/:userId', authMiddleware, adminOnly, User.activeAccountState)
+  app.delete('/users/:userId', authMiddleware, adminOnly, User.remove)
 
   app.use((req: any, res: Response) => res
     .status(404).send({

@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { Response } from 'express'
 import { sign } from 'jsonwebtoken'
 import Request from '../interfaces/request'
@@ -185,12 +186,21 @@ export default class User {
   static async login ({ body, prisma, logger }: Request, response: Response) {
     try {
       const user = await prisma.user.findUnique({
+        select: {
+          id: true,
+          activeAccount: true,
+          password: true
+        },
         where: { email: body.email }
       })
-      if (!user) {
+      if (!user || !user.activeAccount) {
         return response
           .status(409)
-          .send({ error: 'User not found' })
+          .send({
+            error: !user
+              ? 'User not found'
+              : 'Account is not active'
+          })
       }
       if (user.password !== cipherPassword(body.password)) {
         return response
@@ -242,7 +252,15 @@ export default class User {
   }
   static async list ({ prisma, logger }: Request, response: Response) {
     try {
-      const users = await prisma.user.findMany()
+      const users = await prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          isAdmin: true,
+          activeAccount: true
+        }
+      })
       return response
         .status(200)
         .send({
@@ -252,6 +270,126 @@ export default class User {
     } catch (err) {
       console.error(err)
       logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async getUser ({ params, prisma, logger }: Request, response: Response) {
+    try {
+      const user = await prisma.user.findUnique({
+        select: {
+          id: true,
+          name: true,
+          email: true
+        },
+        where: { id: parseInt(params.userId) }
+      })
+      return response
+        .status(200)
+        .send({
+          message: 'User successfully found',
+          user
+        })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async update ({ body, params, prisma, logger }: Request, response: Response) {
+    try {
+      await prisma.user.update({
+        data: {
+          name: body.name,
+          email: body.email
+        },
+        where: { id: parseInt(params.userId) }
+      })
+      return response
+        .status(200)
+        .send({ message: 'User successfully updated' })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async updateProfile ({ body, params, prisma, logger }: Request, response: Response) {
+    try {
+      await prisma.profile.update({
+        data: { bio: body.bio },
+        where: { userId: parseInt(params.userId) }
+      })
+      return response
+        .status(200)
+        .send({ message: 'User profile successfully updated' })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async activeAccountState ({ userId, params, prisma, logger }: Request, response: Response) {
+    try {
+      if (!['active', 'inactive'].includes(params.state)) {
+        return response
+          .status(409)
+          .send({ error: 'Invalid state submitted' })
+      }
+      if (userId === parseInt(params.userId)) {
+        return response
+          .status(409)
+          .send({ error: `You can not ${params.state} your account` })
+      }
+      await prisma.user.update({
+        data: { activeAccount: params.state === 'active' },
+        where: { id: parseInt(params.userId) }
+      })
+      return response
+        .status(200)
+        .send({
+          message: `User account state successfully updated to ${params.state}`
+        })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async remove ({ userId, params, prisma, logger }: Request, response: Response) {
+    try {
+      if (userId === parseInt(params.userId)) {
+        return response
+          .status(409)
+          .send({ error: 'You can not delete your account' })
+      }
+      await prisma.user.delete({
+        where: { id: parseInt(params.userId) }
+      })
+      return response
+        .status(200)
+        .send({
+          message: `User account successfully deleted`
+        })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          return response
+            .status(409)
+            .send({ error: 'User not found' })
+        }
+      }
       return response
         .status(500)
         .send({ error: 'An internal server occurred' })
