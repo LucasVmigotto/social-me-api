@@ -1,6 +1,6 @@
 import { Response } from 'express'
 import { sign } from 'jsonwebtoken'
-import Request from '../types/request'
+import Request from '../interfaces/request'
 import config from '../config'
 import {
   cipherPassword,

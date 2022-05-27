@@ -1,3 +1,24 @@
+export type Config = {
+  NODE_ENV: string,
+  LOG_LEVEL: string,
+  API_HTTP: string,
+  API_HOST: string,
+  API_PORT: number,
+  API_URL: string,
+  JWT_SECRET: string,
+  JWT_SESSION_EXP: string,
+  JWT_UNIQUE_USE_EXP: string,
+  CIPHER_ALGORITHM: string,
+  CIPHER_SALT: string,
+  EMAIL_NAME: string,
+  EMAIL_ADDR: string,
+  EMAIL_HOST: string,
+  EMAIL_PORT: number,
+  EMAIL_AUTH_USERNAME: string,
+  EMAIL_AUTH_PASSWORD: string,
+  API_CLIENT: string
+}
+
 export default {
   NODE_ENV: process.env.NODE_ENV ?? 'test',
   LOG_LEVEL: process.env.LOG_LEVEL ?? 'DEBUG',
@@ -17,4 +38,4 @@ export default {
   EMAIL_AUTH_USERNAME: process.env.EMAIL_AUTH_USERNAME ?? null,
   EMAIL_AUTH_PASSWORD: process.env.EMAIL_AUTH_PASSWORD ?? null,
   API_CLIENT: process.env.API_CLIENT ?? 'http://localhost:8080'
-}
+} as Config

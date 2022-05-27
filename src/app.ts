@@ -8,9 +8,10 @@ import { createServer } from 'http'
 import { PrismaClient } from '@prisma/client'
 import createContext from './context'
 import router from './routes'
-import Request from './types/request'
+import Request from './interfaces/request'
+import { Config } from './config'
 
-export default (config: any) => {
+export default (config: Config) => {
   const { logger, mailer } = createContext(config)
 
   const app = express()

@@ -4,8 +4,9 @@ import {
   format,
   transports
 } from 'winston'
+import { Config } from '../config'
 
-export default (config: any): Logger => {
+export default (config: Config): Logger => {
   const formatLogger = config.NODE_ENV === 'production'
     ? format.combine(format.timestamp(), format.json())
     : format.combine(format.timestamp(), format.prettyPrint(), format.colorize())

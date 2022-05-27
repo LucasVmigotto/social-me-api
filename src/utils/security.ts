@@ -8,7 +8,7 @@ import {
   JsonWebTokenError
 } from 'jsonwebtoken'
 import config from '../config'
-import Request from '../types/request'
+import Request from '../interfaces/request'
 
 export const cipherPassword = (password: string) => {
   const cipher = createCipheriv(

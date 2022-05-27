@@ -9,10 +9,11 @@ import
 from 'nodemailer-express-handlebars'
 import { resolve } from 'path'
 import { Logger } from 'winston'
+import { Config } from '../config'
 
 export type SendMailOptionsExtented = SendMailOptions & TemplateOptions
 
-export default (config: any, logger: Logger) => {
+export default (config: Config, logger: Logger) => {
   const mailer = createTransport({
     host: config.EMAIL_HOST,
     port: config.EMAIL_PORT,
