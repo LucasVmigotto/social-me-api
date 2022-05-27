@@ -10,13 +10,13 @@
 			"name": "Auth",
 			"item": [
 				{
-					"name": "/users/active-account",
+					"name": "/auth/active-account",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"user\": {\n        \"name\": \"John Doe\",\n        \"email\": \"john.doe@mail.com\",\n        \"password\": \"pswd123\"\n    },\n    \"profile\": {\n        \"bio\": null\n    }\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -24,7 +24,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/auth/active-account?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjUzNTk4Nzc5LCJleHAiOjE2NTM2MDU5Nzl9.7XvJ24QeXCEGBlehaezap-qWAfkLwQgK4KjlI4aCvJU",
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/auth/active-account?token=",
 							"protocol": "{{API_HTTP}}",
 							"host": [
 								"{{API_HOST}}"
@@ -37,8 +37,101 @@
 							"query": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjUzNTk4Nzc5LCJleHAiOjE2NTM2MDU5Nzl9.7XvJ24QeXCEGBlehaezap-qWAfkLwQgK4KjlI4aCvJU"
+									"value": ""
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/forgot-password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john.doe@mail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/auth/forgot-password",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"auth",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/reset-password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"pswd12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/auth/reset-password?token=",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"auth",
+								"reset-password"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/auth/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john.doe@mail.com\",\n    \"password\": \"pswd12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/auth/login",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"auth",
+								"login"
 							]
 						}
 					},
@@ -73,6 +166,48 @@
 							"path": [
 								"users",
 								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/me",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/me",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"users",
+								"me"
 							]
 						}
 					},
@@ -119,7 +254,7 @@
 		},
 		{
 			"key": "API_TOKEN",
-			"value": "",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjUzNjA4NjA5LCJleHAiOjE2NTQyMTM0MDl9.XJsRdA8uXl7Hw6l2QCIlv7W87jS3CSNodxpvld3C7uA",
 			"type": "string"
 		}
 	]
