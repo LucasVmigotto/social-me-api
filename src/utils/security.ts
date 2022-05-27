@@ -56,3 +56,24 @@ export const authMiddleware = async (request: Request, response: Response, next:
       .send({ error: 'Access denied' })
   }
 }
+
+export const adminOnly = async (request: Request, response: Response, next: NextFunction) => {
+  try {
+    const isAdmin = await request.prisma.user.findUnique({
+      select: { isAdmin: true },
+      where: { id: request.userId }
+    })
+    if (!isAdmin || !isAdmin.isAdmin) {
+      return response
+        .status(401)
+        .send({ error: 'Access denied' })
+    }
+    next()
+  } catch (err) {
+    console.error(err)
+    request.logger.error(err)
+    return response
+      .status(401)
+      .send({ error: 'Access denied' })
+  }
+}
