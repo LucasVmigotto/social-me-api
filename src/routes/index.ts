@@ -1,6 +1,9 @@
 import { Response } from 'express'
 import User from '../controllers/user'
-import { authMiddleware } from '../utils'
+import {
+  adminOnly,
+  authMiddleware
+} from '../utils'
 
 export default (app: any) => {
   // Auth
@@ -12,6 +15,7 @@ export default (app: any) => {
   // Users
   app.post('/users/create', User.create)
   app.get('/users/me', authMiddleware, User.whoami)
+  app.get('/users/list', authMiddleware, adminOnly, User.list)
 
   app.use((req: any, res: Response) => res
     .status(404).send({
