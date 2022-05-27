@@ -298,4 +298,41 @@ export default class User {
         .send({ error: 'An internal server occurred' })
     }
   }
+  static async update ({ body, params, prisma, logger }: Request, response: Response) {
+    try {
+      const user = await prisma.user.update({
+        data: {
+          name: body.name,
+          email: body.email
+        },
+        where: { id: parseInt(params.userId) }
+      })
+      return response
+        .status(200)
+        .send({ message: 'User successfully updated' })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async updateProfile ({ body, params, prisma, logger }: Request, response: Response) {
+    try {
+      const user = await prisma.profile.update({
+        data: { bio: body.bio },
+        where: { userId: parseInt(params.userId) }
+      })
+      return response
+        .status(200)
+        .send({ message: 'User profile successfully updated' })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
 }

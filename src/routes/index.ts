@@ -13,10 +13,12 @@ export default (app: any) => {
   app.post('/auth/login', User.login)
 
   // Users
-  app.post('/users/create', User.create)
-  app.get('/users/me', authMiddleware, User.whoami)
-  app.get('/users/list', authMiddleware, adminOnly, User.list)
-  app.get('/users/by-id/:userId', authMiddleware, User.getUser)
+  app.post('/users', User.create)
+  app.get('/users/whoami', authMiddleware, User.whoami)
+  app.get('/users', authMiddleware, adminOnly, User.list)
+  app.get('/users/:userId', authMiddleware, User.getUser)
+  app.put('/users/:userId', authMiddleware, User.update)
+  app.put('/users/profile/:userId', authMiddleware, User.updateProfile)
 
   app.use((req: any, res: Response) => res
     .status(404).send({
