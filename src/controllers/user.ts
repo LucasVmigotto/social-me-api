@@ -300,7 +300,7 @@ export default class User {
   }
   static async update ({ body, params, prisma, logger }: Request, response: Response) {
     try {
-      const user = await prisma.user.update({
+      await prisma.user.update({
         data: {
           name: body.name,
           email: body.email
@@ -320,13 +320,44 @@ export default class User {
   }
   static async updateProfile ({ body, params, prisma, logger }: Request, response: Response) {
     try {
-      const user = await prisma.profile.update({
+      await prisma.profile.update({
         data: { bio: body.bio },
         where: { userId: parseInt(params.userId) }
       })
       return response
         .status(200)
         .send({ message: 'User profile successfully updated' })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async activeAccountState ({ userId, params, prisma, logger }: Request, response: Response) {
+    try {
+      if (!['active', 'inactive'].includes(params.state)) {
+        return response
+          .status(409)
+          .send({ error: 'Invalid state submitted' })
+      }
+      console.log('userId', userId)
+      console.log('params.userId', params.userId)
+      if (userId === parseInt(params.userId)) {
+        return response
+          .status(409)
+          .send({ error: `You can not ${params.state} your account` })
+      }
+      await prisma.user.update({
+        data: { activeAccount: params.state === 'active' },
+        where: { id: parseInt(params.userId) }
+      })
+      return response
+        .status(200)
+        .send({
+          message: `User account state successfully updated to ${params.state}`
+        })
     } catch (err) {
       console.error(err)
       logger.error(err)

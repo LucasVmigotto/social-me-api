@@ -19,6 +19,7 @@ export default (app: any) => {
   app.get('/users/:userId', authMiddleware, User.getUser)
   app.put('/users/:userId', authMiddleware, User.update)
   app.put('/users/profile/:userId', authMiddleware, User.updateProfile)
+  app.patch('/users/account-state/:state/:userId', authMiddleware, adminOnly, User.activeAccountState)
 
   app.use((req: any, res: Response) => res
     .status(404).send({
