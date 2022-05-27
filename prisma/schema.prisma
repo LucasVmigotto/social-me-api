@@ -23,6 +23,7 @@ model User {
   password        String
   name            String
   activeAccount   Boolean           @default(false)
+  isAdmin         Boolean           @default(false)
   posts           Post[]
   commentaries    Commentary[]
   ratings         UserPostRating[]
