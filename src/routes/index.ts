@@ -16,6 +16,7 @@ export default (app: any) => {
   app.post('/users/create', User.create)
   app.get('/users/me', authMiddleware, User.whoami)
   app.get('/users/list', authMiddleware, adminOnly, User.list)
+  app.get('/users/by-id/:userId', authMiddleware, User.getUser)
 
   app.use((req: any, res: Response) => res
     .status(404).send({

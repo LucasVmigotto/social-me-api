@@ -185,12 +185,21 @@ export default class User {
   static async login ({ body, prisma, logger }: Request, response: Response) {
     try {
       const user = await prisma.user.findUnique({
+        select: {
+          id: true,
+          activeAccount: true,
+          password: true
+        },
         where: { email: body.email }
       })
-      if (!user) {
+      if (!user || !user.activeAccount) {
         return response
           .status(409)
-          .send({ error: 'User not found' })
+          .send({
+            error: !user
+              ? 'User not found'
+              : 'Account is not active'
+          })
       }
       if (user.password !== cipherPassword(body.password)) {
         return response
@@ -242,12 +251,44 @@ export default class User {
   }
   static async list ({ prisma, logger }: Request, response: Response) {
     try {
-      const users = await prisma.user.findMany()
+      const users = await prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          isAdmin: true,
+          activeAccount: true
+        }
+      })
       return response
         .status(200)
         .send({
           message: 'Users successfully listed',
           users
+        })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async getUser ({ params, prisma, logger }: Request, response: Response) {
+    try {
+      const user = await prisma.user.findUnique({
+        select: {
+          id: true,
+          name: true,
+          email: true
+        },
+        where: { id: parseInt(params.userId) }
+      })
+      return response
+        .status(200)
+        .send({
+          message: 'User successfully found',
+          user
         })
     } catch (err) {
       console.error(err)
