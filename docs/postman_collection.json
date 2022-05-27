@@ -143,7 +143,7 @@
 			"name": "Users",
 			"item": [
 				{
-					"name": "/users/create",
+					"name": "/users",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -157,22 +157,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/create",
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users",
 							"protocol": "{{API_HTTP}}",
 							"host": [
 								"{{API_HOST}}"
 							],
 							"port": "{{API_PORT}}",
 							"path": [
-								"users",
-								"create"
+								"users"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "/users/me",
+					"name": "/users",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -199,7 +198,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/me",
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/list",
 							"protocol": "{{API_HTTP}}",
 							"host": [
 								"{{API_HOST}}"
@@ -207,7 +206,253 @@
 							"port": "{{API_PORT}}",
 							"path": [
 								"users",
-								"me"
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/<userId>",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/<userId>",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"users",
+								"<userId>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/me/whoami",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/me/whoami",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"users",
+								"me",
+								"whoami"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/<userId>",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@mail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/<userId>",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"users",
+								"<userId>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/profile/<userId>",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bio\": \"I'm Bad\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/profile/<userId>",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"users",
+								"profile",
+								"<userId>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/account-state/active/<userId>",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/account-state/active/<userId>",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"users",
+								"account-state",
+								"active",
+								"<userId>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/account-state/inactive/<userId>",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/account-state/inactive/<userId>",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"users",
+								"account-state",
+								"inactive",
+								"<userId>"
 							]
 						}
 					},
@@ -254,7 +499,7 @@
 		},
 		{
 			"key": "API_TOKEN",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjUzNjA4NjA5LCJleHAiOjE2NTQyMTM0MDl9.XJsRdA8uXl7Hw6l2QCIlv7W87jS3CSNodxpvld3C7uA",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjUzNjczMjI1LCJleHAiOjE2NTQyNzgwMjV9.1FZ1IYvZjN3a_cwCEh2RQwj6HDQ09ZRZFMni9fPFX8s",
 			"type": "string"
 		}
 	]
