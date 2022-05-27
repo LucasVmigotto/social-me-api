@@ -1,17 +1,13 @@
-import { Prisma } from '@prisma/client'
 import { Response } from 'express'
 import { sign } from 'jsonwebtoken'
 import Request from '../types/request'
 import config from '../config'
-import passwordResetTemplate from '../templates/passwordReset.template'
-import forgotPasswordTemplate from '../templates/forgotPassword.template'
-import newAccountTemplate from '../templates/newAccount.template'
-import accountActivatedTemplateCopy from '../templates/accountActivated.template'
 import {
   cipherPassword,
   emailAddress,
   verifyJWT
 } from '../utils'
+import { SendMailOptionsExtented } from '../context/mailer'
 
 export default class User {
   static async create ({ body, prisma, mailer, logger }: Request, response: Response) {
@@ -34,15 +30,16 @@ export default class User {
           )
         }
       })
-      await mailer.sendMail({
+      mailer.sendMail({
         from: emailAddress(config.EMAIL_NAME, config.EMAIL_ADDR),
         to: emailAddress(created.name, created.email),
         subject: 'Wellcome: Active your account',
-        html: newAccountTemplate(
-          created.name,
-          `${config.API_URL}/auth/active-account?token=${token}`
-        )
-      })
+        template: 'newAccount',
+        context: {
+          name: created.name,
+          link: `${config.API_URL}/auth/active-account?token=${token}`
+        }
+      } as SendMailOptionsExtented)
       return response
         .status(200)
         .send({
@@ -79,15 +76,16 @@ export default class User {
       await prisma.singleUseToken.delete({
         where: { token: query.token as string }
       })
-      await mailer.sendMail({
+      mailer.sendMail({
         from: emailAddress(config.EMAIL_NAME, config.EMAIL_ADDR),
         to: emailAddress(updated.name, updated.email),
         subject: 'Wellcome: Active your account',
-        html: accountActivatedTemplateCopy(
-          updated.name,
-          `${config.API_CLIENT}/auth/login`
-        )
-      })
+        template: 'accountActivated',
+        context: {
+          name: updated.name,
+          link: `${config.API_CLIENT}/auth/login`
+        }
+      } as SendMailOptionsExtented)
       return response
         .redirect(`${config.API_CLIENT}/auth/login`)
     } catch (err) {
@@ -123,12 +121,13 @@ export default class User {
           )
         }
       })
-      await mailer.sendMail({
+      mailer.sendMail({
         from: emailAddress(config.EMAIL_NAME, config.EMAIL_ADDR),
         to: emailAddress(user.name, user.email),
         subject: 'Account: Password re-defined',
-        html: forgotPasswordTemplate(`${config.API_CLIENT}/auth/reset-password?token=${token}`)
-      })
+        template: 'forgotPassword',
+        context: { link: `${config.API_CLIENT}/auth/reset-password?token=${token}` }
+      } as SendMailOptionsExtented)
       return response
         .status(200)
         .send({ message: 'E-Mail successfully sent' })
@@ -167,11 +166,12 @@ export default class User {
         from: emailAddress(config.EMAIL_NAME, config.EMAIL_ADDR),
         to: emailAddress(updated.name, updated.email),
         subject: 'Account: Password re-defined',
-        html: passwordResetTemplate(
-          updated.name,
-          `${config.API_CLIENT}/auth/login`
-        )
-      })
+        template: 'passwordReset',
+        context: {
+          name: updated.name,
+          link: `${config.API_CLIENT}/auth/login`
+        }
+      } as SendMailOptionsExtented)
       return response
         .redirect(`${config.API_CLIENT}/auth/login`)
     } catch (err) {

@@ -14,6 +14,7 @@ export default {
   EMAIL_ADDR: process.env.EMAIL_ADDR ?? 'no-reply@social-me.com',
   EMAIL_HOST: process.env.EMAIL_HOST ?? 'social-me-mailhog',
   EMAIL_PORT: process.env.EMAIL_PORT ?? 1025,
-  EMAIL_AUTH: process.env.EMAIL_AUTH ?? null,
+  EMAIL_AUTH_USERNAME: process.env.EMAIL_AUTH_USERNAME ?? null,
+  EMAIL_AUTH_PASSWORD: process.env.EMAIL_AUTH_PASSWORD ?? null,
   API_CLIENT: process.env.API_CLIENT ?? 'http://localhost:8080'
 }
