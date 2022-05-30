@@ -23,8 +23,10 @@ export default (app: any) => {
   app.patch('/users/account-state/:state/:userId', authMiddleware, adminOnly, User.activeAccountState)
   app.delete('/users/:userId', authMiddleware, adminOnly, User.remove)
 
+  // Posts
   app.post('/posts', authMiddleware, Post.create)
   app.get('/posts/:postId', authMiddleware, Post.viewPost)
+  app.put('/posts/:postId', authMiddleware, Post.update)
 
   app.use((req: any, res: Response) => res
     .status(404).send({

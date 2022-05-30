@@ -71,4 +71,46 @@ export default class User {
         .send({ error: 'An internal server occurred' })
     }
   }
+  static async update ({ userId, params, body, prisma, logger }: Request, response: Response) {
+    try {
+      const old = await prisma.post.findUnique({
+        where: { id: parseInt(params.postId) }
+      })
+      if (!old) {
+        return response
+          .status(409)
+          .send({ error: 'Post not found' })
+      }
+      if (old.authorId !== userId) {
+        return response
+          .status(409)
+          .send({ error: 'You can only edit your posts' })
+      }
+      await prisma.post.update({
+        data: {
+          title: body.title,
+          content: body.content,
+          published: body.published,
+          history: {
+            create: {
+              newTitle: body.title,
+              oldTitle: old.title,
+              newContent: body.content,
+              oldContent: old.content
+            }
+          }
+        },
+        where: { id: parseInt(params.postId) }
+      })
+      return response
+        .status(200)
+        .send({ message: 'Post successfully updated' })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
 }
