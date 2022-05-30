@@ -64,7 +64,7 @@ export default class Commentary {
           .status(409)
           .send({ error: 'Commentary not found' })
       }
-      if (commentary.authorId !== userId ) {
+      if (commentary.authorId !== userId) {
         return response
           .status(409)
           .send({ error: 'You can only edit your commentaries' })
@@ -77,6 +77,52 @@ export default class Commentary {
         .status(200)
         .send({
           message: 'Commentary successfully updated'
+        })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async remove ({ userId, params, body, prisma, logger }: Request, response: Response) {
+    try {
+      const commentary = await prisma.commentary.findUnique({
+        select: {
+          authorId: true,
+          post: { select: { authorId: true } }
+        },
+        where: { id: parseInt(params.commentaryId) }
+      })
+      if (!commentary) {
+        return response
+          .status(409)
+          .send({ error: 'Commentary not found' })
+      }
+      const user = await prisma.user.findUnique({
+        select: { isAdmin: true },
+        where: { id: userId }
+      })
+      if (commentary.authorId !== userId && commentary.post.authorId !== userId && !user?.isAdmin) {
+        return response
+          .status(409)
+          .send({ error: 'You can only edit your commentaries' })
+      }
+      await prisma.commentary.update({
+        data: {
+          deletedBy: commentary.authorId === userId
+            ? 'COMMENT_CREATOR'
+            : commentary.post.authorId === userId
+              ? 'POST_OWNER'
+              : 'ADMIN'
+        },
+        where: { id: parseInt(params.commentaryId ) }
+      })
+      return response
+        .status(200)
+        .send({
+          message: 'Commentary successfully removed'
         })
     } catch (err) {
       console.error(err)

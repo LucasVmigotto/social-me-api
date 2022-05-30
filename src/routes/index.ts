@@ -35,6 +35,7 @@ export default (app: any) => {
   // Commentaries
   app.post('/commentaries', authMiddleware, Commentary.create)
   app.put('/commentaries/:commentaryId', authMiddleware, Commentary.update)
+  app.delete('/commentaries/:commentaryId', authMiddleware, Commentary.remove)
 
   app.use((req: any, res: Response) => res
     .status(404).send({
