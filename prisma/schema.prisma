@@ -12,11 +12,6 @@ enum DeletedByType {
   POST_OWNER
 }
 
-enum RatingType {
-  LIKE
-  DISLIKE
-}
-
 model User {
   id              Int               @id @default(autoincrement())
   email           String            @unique
@@ -26,7 +21,8 @@ model User {
   isAdmin         Boolean           @default(false)
   posts           Post[]
   commentaries    Commentary[]
-  ratings         UserPostRating[]
+  likes           Likes[]
+  dislikes        Dislikes[]
   tokens          SingleUseToken[]
   profile         Profile?
 }
@@ -45,10 +41,11 @@ model Post {
   published       Boolean           @default(false)
   authorId        Int
   author          User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  views           Int
+  views           Int               @default(0)
   history         PostAudit[]
   commentaries    Commentary[]
-  ratings         UserPostRating[]
+  likes           Likes[]
+  dislikes        Dislikes[]
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 }
@@ -74,13 +71,21 @@ model Commentary {
   deletedBy       DeletedByType?
 }
 
-model UserPostRating {
-  ratingType      RatingType
+model Likes {
   postId          Int
   post            Post              @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId          Int
   user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  ratedAt         DateTime          @default(now())
+  likedAt         DateTime          @default(now())
+  @@id([postId, userId])
+}
+
+model Dislikes {
+  postId          Int
+  post            Post              @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId          Int
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dislikedAt      DateTime          @default(now())
   @@id([postId, userId])
 }
 
