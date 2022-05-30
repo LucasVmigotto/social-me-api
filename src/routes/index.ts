@@ -25,6 +25,7 @@ export default (app: any) => {
 
   // Posts
   app.post('/posts', authMiddleware, Post.create)
+  app.get('/posts', authMiddleware, Post.list)
   app.get('/posts/:postId', authMiddleware, Post.viewPost)
   app.put('/posts/:postId', authMiddleware, Post.update)
   app.delete('/posts/:postId', authMiddleware, Post.remove)

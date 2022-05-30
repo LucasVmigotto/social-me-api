@@ -1,8 +1,5 @@
-import { Prisma } from '@prisma/client'
 import { Response } from 'express'
 import Request from '../interfaces/request'
-import config from '../config'
-import { SendMailOptionsExtented } from '../context/mailer'
 
 export default class User {
   static async create ({ userId, body, prisma, logger }: Request, response: Response) {
@@ -68,6 +65,42 @@ export default class User {
         .send({
           message: 'Post found',
           post
+        })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async list ({ prisma, logger }: Request, response: Response) {
+    try {
+      const posts = await prisma.post.findMany({
+        include: {
+          _count: {
+            select: {
+              likes: true,
+              dislikes: true
+            }
+          },
+          commentaries: {
+            select: {
+              id: true,
+              content: true,
+              author: {
+                select: { name: true }
+              }
+            },
+            where: { deletedBy: null }
+          }
+        }
+      })
+      return response
+        .status(200)
+        .send({
+          message: 'Posts successfully listed',
+          posts
         })
     } catch (err) {
       console.error(err)
