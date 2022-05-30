@@ -34,6 +34,7 @@ export default (app: any) => {
 
   // Commentaries
   app.post('/commentaries', authMiddleware, Commentary.create)
+  app.get('/commentaries/:postId', authMiddleware, Commentary.list)
   app.put('/commentaries/:commentaryId', authMiddleware, Commentary.update)
   app.delete('/commentaries/:commentaryId', authMiddleware, Commentary.remove)
 

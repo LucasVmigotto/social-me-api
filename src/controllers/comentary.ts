@@ -86,7 +86,7 @@ export default class Commentary {
         .send({ error: 'An internal server occurred' })
     }
   }
-  static async remove ({ userId, params, body, prisma, logger }: Request, response: Response) {
+  static async remove ({ userId, params, prisma, logger }: Request, response: Response) {
     try {
       const commentary = await prisma.commentary.findUnique({
         select: {
@@ -123,6 +123,29 @@ export default class Commentary {
         .status(200)
         .send({
           message: 'Commentary successfully removed'
+        })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async list ({ params, prisma, logger }: Request, response: Response) {
+    try {
+      const commentaries = await prisma.commentary.findMany({
+        select: {
+          content: true,
+          author: { select: { name: true } }
+        },
+        where: { deletedBy: null }
+      })
+      return response
+        .status(200)
+        .send({
+          message: 'Commentaries successfully listed',
+          commentaries
         })
     } catch (err) {
       console.error(err)
