@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import Request from '../interfaces/request'
 
-export default class User {
+export default class Post {
   static async create ({ userId, body, prisma, logger }: Request, response: Response) {
     try {
       const created = await prisma.post.create({
