@@ -21,8 +21,8 @@ model User {
   isAdmin         Boolean           @default(false)
   posts           Post[]
   commentaries    Commentary[]
-  likes           Likes[]
-  dislikes        Dislikes[]
+  likes           Like[]
+  dislikes        Dislike[]
   tokens          SingleUseToken[]
   profile         Profile?
 }
@@ -44,8 +44,8 @@ model Post {
   views           Int               @default(0)
   history         PostAudit[]
   commentaries    Commentary[]
-  likes           Likes[]
-  dislikes        Dislikes[]
+  likes           Like[]
+  dislikes        Dislike[]
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 }
@@ -71,7 +71,7 @@ model Commentary {
   deletedBy       DeletedByType?
 }
 
-model Likes {
+model Like {
   postId          Int
   post            Post              @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId          Int
@@ -80,7 +80,7 @@ model Likes {
   @@id([postId, userId])
 }
 
-model Dislikes {
+model Dislike {
   postId          Int
   post            Post              @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId          Int
