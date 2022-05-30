@@ -10,6 +10,7 @@ datasource db {
 enum DeletedByType {
   COMMENT_CREATOR
   POST_OWNER
+  ADMIN
 }
 
 model User {

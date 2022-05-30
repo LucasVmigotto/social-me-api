@@ -1,6 +1,7 @@
 import { Response } from 'express'
 import User from '../controllers/user'
-import Post from '../controllers/posts'
+import Post from '../controllers/post'
+import Commentary from '../controllers/comentary'
 import {
   adminOnly,
   authMiddleware
@@ -30,6 +31,12 @@ export default (app: any) => {
   app.put('/posts/:postId', authMiddleware, Post.update)
   app.delete('/posts/:postId', authMiddleware, Post.remove)
   app.patch('/posts/:postId/rate/:rate', authMiddleware, Post.rate)
+
+  // Commentaries
+  app.post('/commentaries', authMiddleware, Commentary.create)
+  app.get('/commentaries/:postId', authMiddleware, Commentary.list)
+  app.put('/commentaries/:commentaryId', authMiddleware, Commentary.update)
+  app.delete('/commentaries/:commentaryId', authMiddleware, Commentary.remove)
 
   app.use((req: any, res: Response) => res
     .status(404).send({
