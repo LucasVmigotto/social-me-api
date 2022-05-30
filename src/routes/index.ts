@@ -28,6 +28,7 @@ export default (app: any) => {
   app.get('/posts/:postId', authMiddleware, Post.viewPost)
   app.put('/posts/:postId', authMiddleware, Post.update)
   app.delete('/posts/:postId', authMiddleware, Post.remove)
+  app.patch('/posts/:postId/rate/:rate', authMiddleware, Post.rate)
 
   app.use((req: any, res: Response) => res
     .status(404).send({

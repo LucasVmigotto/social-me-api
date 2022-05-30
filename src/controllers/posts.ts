@@ -44,6 +44,12 @@ export default class User {
       }
       const post = await prisma.post.findUnique({
         include: {
+          _count: {
+            select: {
+              likes: true,
+              dislikes: true
+            }
+          },
           commentaries: {
             select: {
               id: true,
@@ -139,6 +145,83 @@ export default class User {
       return response
         .status(200)
         .send({ message: 'Post successfully removed' })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async rate ({ userId, params, prisma, logger }: Request, response: Response) {
+    try {
+      if (!['like', 'dislike'].includes(params.rate)) {
+        return response
+          .status(409)
+          .send({ error: 'Rate type not avaliable' })
+      }
+      if (params.rate === 'like') {
+        prisma.dislike.delete({
+          where: {
+            postId_userId: {
+              postId: parseInt(params.postId),
+              userId: userId as number
+            }
+          }
+        })
+          .catch(() => null)
+        const rated = await prisma.like.findUnique({
+          where: {
+            postId_userId: {
+              postId: parseInt(params.postId),
+              userId: userId as number,
+            }
+          }
+        })
+        if (rated) {
+          return response
+            .status(409)
+            .send({ error: 'You already reacted to this post' })
+        }
+        await prisma.like.create({
+          data: {
+            post: { connect: { id: parseInt(params.postId) } },
+            user: { connect: { id: userId } }
+          }
+        })
+      } else {
+        prisma.like.delete({
+          where: {
+            postId_userId: {
+              postId: parseInt(params.postId),
+              userId: userId as number
+            }
+          }
+        })
+          .catch(() => null)
+        const rated = await prisma.dislike.findUnique({
+          where: {
+            postId_userId: {
+              postId: parseInt(params.postId),
+              userId: userId as number,
+            }
+          }
+        })
+        if (rated) {
+          return response
+            .status(409)
+            .send({ error: 'You already reacted to this post' })
+        }
+        await prisma.dislike.create({
+          data: {
+            post: { connect: { id: parseInt(params.postId) } },
+            user: { connect: { id: userId } }
+          }
+        })
+      }
+      return response
+        .status(200)
+        .send({ message: 'Post successfully rated' })
     } catch (err) {
       console.error(err)
       logger.error(err)
