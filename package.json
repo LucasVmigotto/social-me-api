@@ -12,20 +12,33 @@
     "private": false,
     "scripts": {
         "start:dev": "ts-node-dev -r dotenv/config --transpile-only --no-notify --exit-child src/index.ts",
+        "prisma:migrate:latest": "prisma migrate dev",
+        "prisma:migrate:rollback": "prisma migrate reset",
+        "prisma:migrate:make": "prisma migrate dev --name",
+        "prisma:studio": "prisma studio --port $PRISMA_PORT",
         "lint": "ts-standard"
     },
     "devDependencies": {
+        "@types/cors": "^2.8.12",
         "@types/express": "^4.17.13",
+        "@types/jsonwebtoken": "^8.5.8",
+        "@types/morgan": "^1.9.3",
         "@types/node": "^17.0.35",
+        "@types/nodemailer": "^6.4.4",
+        "@types/nodemailer-express-handlebars": "^4.0.2",
         "ts-node-dev": "^1.1.8",
         "ts-standard": "^11.0.0",
         "typescript": "^4.7.2"
     },
     "dependencies": {
         "@prisma/client": "^3.14.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.0.1",
         "express": "^4.18.1",
         "jsonwebtoken": "^8.5.1",
+        "morgan": "^1.10.0",
         "nodemailer": "^6.7.5",
+        "nodemailer-express-handlebars": "^5.0.0",
         "prisma": "^3.14.0",
         "winston": "^3.7.2"
     }

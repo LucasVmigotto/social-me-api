@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DeletedByType {
+  COMMENT_CREATOR
+  POST_OWNER
+  ADMIN
+}
+
+model User {
+  id              Int               @id @default(autoincrement())
+  email           String            @unique
+  password        String
+  name            String
+  activeAccount   Boolean           @default(false)
+  isAdmin         Boolean           @default(false)
+  posts           Post[]
+  commentaries    Commentary[]
+  likes           Like[]
+  dislikes        Dislike[]
+  tokens          SingleUseToken[]
+  profile         Profile?
+}
+
+model Profile {
+  id              Int               @id @default(autoincrement())
+  bio             String?
+  userId          Int               @unique
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id              Int               @id @default(autoincrement())
+  title           String            @db.VarChar(255)
+  content         String?
+  published       Boolean           @default(false)
+  authorId        Int
+  author          User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  views           Int               @default(0)
+  history         PostAudit[]
+  commentaries    Commentary[]
+  likes           Like[]
+  dislikes        Dislike[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model PostAudit {
+  id              Int               @id @default(autoincrement())
+  oldTitle        String            @db.VarChar(255)
+  newTitle        String            @db.VarChar(255)
+  oldContent      String?
+  newContent      String?
+  postId          Int
+  post            Post              @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt       DateTime          @updatedAt
+}
+
+model Commentary {
+  id              Int               @id @default(autoincrement())
+  content         String
+  postId          Int
+  post            Post              @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId        Int
+  author          User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  deletedBy       DeletedByType?
+}
+
+model Like {
+  postId          Int
+  post            Post              @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId          Int
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likedAt         DateTime          @default(now())
+  @@id([postId, userId])
+}
+
+model Dislike {
+  postId          Int
+  post            Post              @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId          Int
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dislikedAt      DateTime          @default(now())
+  @@id([postId, userId])
+}
+
+model SingleUseToken {
+  id              Int               @id @default(autoincrement())
+  userId          Int
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token           String            @unique
+}
