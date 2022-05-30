@@ -43,7 +43,40 @@ export default class Commentary {
       return response
         .status(200)
         .send({
-          message: 'User successfully created'
+          message: 'Post successfully created'
+        })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
+  static async update ({ userId, params, body, prisma, logger }: Request, response: Response) {
+    try {
+      const commentary = await prisma.commentary.findUnique({
+        select: { authorId: true },
+        where: { id: parseInt(params.commentaryId) }
+      })
+      if (!commentary) {
+        return response
+          .status(409)
+          .send({ error: 'Commentary not found' })
+      }
+      if (commentary.authorId !== userId ) {
+        return response
+          .status(409)
+          .send({ error: 'You can only edit your commentaries' })
+      }
+      await prisma.commentary.update({
+        data: { content: body.content },
+        where: { id: parseInt(params.commentaryId ) }
+      })
+      return response
+        .status(200)
+        .send({
+          message: 'Commentary successfully updated'
         })
     } catch (err) {
       console.error(err)
