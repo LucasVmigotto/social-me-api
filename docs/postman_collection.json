@@ -115,7 +115,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"john.doe@mail.com\",\n    \"password\": \"pswd12345\"\n}",
+							"raw": "{\n    \"email\": \"john.doe.1@mail.com\",\n    \"password\": \"pswd123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -149,7 +149,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"user\": {\n        \"name\": \"John Doe\",\n        \"email\": \"john.doe@mail.com\",\n        \"password\": \"pswd123\"\n    },\n    \"profile\": {\n        \"bio\": null\n    }\n}",
+							"raw": "{\n    \"user\": {\n        \"name\": \"John Doe 1\",\n        \"email\": \"john.doe.1@mail.com\",\n        \"password\": \"pswd123\"\n    },\n    \"profile\": {\n        \"bio\": \"I'm good\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -282,7 +282,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/me/whoami",
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/users/whoami",
 							"protocol": "{{API_HTTP}}",
 							"host": [
 								"{{API_HOST}}"
@@ -290,7 +290,6 @@
 							"port": "{{API_PORT}}",
 							"path": [
 								"users",
-								"me",
 								"whoami"
 							]
 						}
@@ -498,6 +497,322 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Posts",
+			"item": [
+				{
+					"name": "/posts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Hello World\",\n    \"content\": \"Aliqua nulla elit velit duis sit non quis incididunt voluptate duis cupidatat.\",\n    \"published\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/posts",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/posts/<postId>",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/posts/<postId>",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"posts",
+								"<postId>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/posts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/posts",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/posts/<postId>",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Hello World\",\n    \"content\": \"Aliqua nulla elit velit duis sit non quis incididunt voluptate duis cupidatat.\",\n    \"published\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/posts/<postId>",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"posts",
+								"<postId>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/posts/<postId>",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/posts/<postId>",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"posts",
+								"<postId>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/posts/<postId>/rate/like",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/posts/<postId>/rate/like",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"posts",
+								"<postId>",
+								"rate",
+								"like"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/posts/<postId>/rate/dislike",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{API_TOKEN_NON_ADMIN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_HTTP}}://{{API_HOST}}:{{API_PORT}}/posts/<postId>/rate/dislike",
+							"protocol": "{{API_HTTP}}",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"posts",
+								"<postId>",
+								"rate",
+								"dislike"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{API_TOKEN}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	],
 	"event": [
@@ -538,7 +853,12 @@
 		},
 		{
 			"key": "API_TOKEN",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjUzNjczMjI1LCJleHAiOjE2NTQyNzgwMjV9.1FZ1IYvZjN3a_cwCEh2RQwj6HDQ09ZRZFMni9fPFX8s",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjUzOTMyNDgyLCJleHAiOjk2NTQ1MzcyODJ9.kBwpMpR0hCDtDGXNwG-2r3Dx1880WDKM6oZiPeMeGv8",
+			"type": "string"
+		},
+		{
+			"key": "API_TOKEN_NON_ADMIN",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjUzOTMyNTQ3LCJleHAiOjk2NTQ1MzczNDd9.d5Fdwsx8Fy5-9X8gvSu6yc6V2pgng0n2T-g3NJ7E97A",
 			"type": "string"
 		}
 	]
