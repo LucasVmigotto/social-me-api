@@ -113,4 +113,38 @@ export default class User {
         .send({ error: 'An internal server occurred' })
     }
   }
+  static async remove ({ userId, params, prisma, logger }: Request, response: Response) {
+    try {
+      const post = await prisma.post.findUnique({
+        select: { authorId: true },
+        where: { id: parseInt(params.postId) }
+      })
+      if (!post) {
+        return response
+          .status(409)
+          .send({ error: 'Post not found' })
+      }
+      const user = await prisma.user.findUnique({
+        select: { isAdmin: true },
+        where: { id: userId }
+      })
+      if (post.authorId !== userId && !user?.isAdmin) {
+        return response
+          .status(409)
+          .send({ error: 'You can remove only your posts' })
+      }
+      await prisma.post.delete({
+        where: { id: parseInt(params.postId) }
+      })
+      return response
+        .status(200)
+        .send({ message: 'Post successfully removed' })
+    } catch (err) {
+      console.error(err)
+      logger.error(err)
+      return response
+        .status(500)
+        .send({ error: 'An internal server occurred' })
+    }
+  }
 }
